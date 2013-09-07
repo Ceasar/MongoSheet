@@ -26,7 +26,13 @@ populate_table = (collection) ->
         fixedRowsTop: 1
         colHeaders: ['ID', 'Name', 'Address']
         contextMenu: true
-        afterChange: -> console.log 'hi'
+        afterChange: (args) ->
+          if args?
+            row_number = args[0][0]
+            table = $('#example').handsontable('getData')
+            row = table[row_number]
+            window.database[Session.get('current_collection')].update({_id : row._id}, row)
+          
 
 
 Deps.autorun( (c) ->
@@ -36,8 +42,3 @@ Deps.autorun( (c) ->
 Meteor.startup ->
   populate_collections($('#database').val())
   populate_table(Session.get('current_collection'))
-
-
-
-# TODO afterChange in handsontable to update db
-# TODO deps.autorun some shit to feed handsontable new data
