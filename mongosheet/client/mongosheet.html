@@ -6,16 +6,24 @@
 
 <body>
    <h1>MongoSheet</h1>
-   {{> database }}
+   {{> query}}
   <div id="example" class="handsontable"></div>
 </body>
 
+<template name="query">
+  <form>
+    <label> Mongo URI: </label>
+     <input style="width:300px" id="database" type="text" name="database_input"
+             value="mongodb://localhost:12345/test">
 
+    <br>
+    
+    <label> db. </label>
+    <input style="width:100px" id="collection" type="text" name="collection" value="collection">
 
-
-<template name="database">
-   <form>
-         <input id="database" type="text" name="database_input" value="mongodb://localhost:12345/test">
-      <input type="submit" value="Submit">
-   </form>
+    <label> .find({ </label>
+    <input style="width:50%" id="query" type="text" name="query">
+    <label> }) </label>
+    <input type="submit" value="Run">
+  </form>
 </template>
