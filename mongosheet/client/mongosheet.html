@@ -1,0 +1,22 @@
+<head>
+  <title>MongoSheet</title>
+</head>
+
+
+
+<body>
+   {{loginButtons}}
+   <h1>MongoSheet</h1>
+   {{> database }}
+  <div id="example" class="handsontable"></div>
+</body>
+
+
+
+
+<template name="database">
+   <form>
+         <input id="database" type="text" name="database_input" value="mongodb://localhost:12345/test">
+      <input type="submit" value="Submit">
+   </form>
+</template>
