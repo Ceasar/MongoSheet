@@ -1,9 +1,18 @@
 <head>
   <title>mongosheet</title>
+
+<link rel="stylesheet" media="screen" href="http://handsontable.com/dist/jquery.handsontable.full.css">
+<link rel="stylesheet" media="screen" href="http://handsontable.com/demo/css/samples.css">
 </head>
+
+
 
 <body>
   {{> hello}}
+ 
+ 
+<script src="http://handsontable.com/dist/jquery.handsontable.full.js"></script>
+ <div id="example" class="handsontable"></div>
 </body>
 
 <template name="hello">
@@ -11,3 +20,6 @@
   {{greeting}}
   <input type="button" value="Click" />
 </template>
+
+
+
