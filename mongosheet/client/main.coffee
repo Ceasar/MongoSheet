@@ -20,11 +20,12 @@ Template.database.events
 
 populate_table = (collection) ->
   if collection? and window.database[collection]?
+    documents = window.database.collection.find().fetch()
     $('#example').handsontable
-        data: window.database.collection.find().fetch()
+        data: documents
         minSpareRows: 1
         fixedRowsTop: 1
-        colHeaders: ['ID', 'Name', 'Address']
+        colHeaders: get_schema(documents)
         contextMenu: true
         afterChange: (args) ->
           if args?
@@ -34,6 +35,13 @@ populate_table = (collection) ->
             window.database[Session.get('current_collection')].update({_id : row._id}, row)
           
 
+# TODO: There assumes that the order of _.keys(schema) returns the columns in
+# the same order they're displayed in a row.
+get_schema = (documents) ->
+  schema = {}
+  for document in documents
+    schema = _.extend(schema, document)
+  return _.keys(schema)
 
 Deps.autorun( (c) ->
   populate_table(Session.get('current_collection'))
