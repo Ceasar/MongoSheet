@@ -1,6 +1,5 @@
 window.database = {}
 
-
 # take the variables from the page to pull collections to the table
 create_collections_populate = ->
     db_uri = $('#database').val()
@@ -27,7 +26,6 @@ get_query = () ->
   s = "window.database.#{$('#collection').val()}.find({ #{$('#query').val()} }).fetch()"
   return eval(s)
 
-
 add_column = ->
   column_name = prompt("New column name")
   if column_name?
@@ -38,7 +36,7 @@ populate_table = ->
   if collection_name? and window.database[collection_name]?
     collection = window.database[collection_name]
     # will throw error if empty collection
-    schema = _.keys(collection.find().fetch()[0])
+    schema = get_schema(collection.find().fetch())
     schema.push('')
     cols = _.map(schema, (col) ->
       dict = {data: col}
@@ -67,6 +65,14 @@ populate_table = ->
              collection.remove({_id: del['_id']})
     $('table th:last').html('<button id="new_col">+</button>')
     $('#new_col').click( -> add_column())
+
+# TODO: There assumes that the order of _.keys(schema) returns the columns in
+# the same order they're displayed in a row.
+get_schema = (documents) ->
+  schema = {}
+  for document in documents
+    schema = _.extend(schema, document)
+  return _.keys(schema)
 
 Meteor.startup ->
   create_collections_populate()
