@@ -93,7 +93,6 @@ populate_table = ->
       $('#example').handsontable('updateSettings', settings)
     #$('table th:last').append('<button id="new_col">+</button>')
     $('table th').append('<button class="delete_col">-</button>')
-    $('.relative').css('display', 'inline-block')
     $('#new_col').click(add_column)
     $('.delete_col').click(del_column)
 
