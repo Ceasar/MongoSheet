@@ -52,32 +52,47 @@ populate_table = ->
     collection = window.database[collection_name]
     # will throw error if empty collection
     schema = get_schema(collection.find().fetch())
-    schema.push('')
     cols = _.map(schema, (col) ->
       dict = {data: col}
-      if col is '_id' or ''
+      if col is '_id'
         dict['readOnly'] = true
       return dict
     )
-    $('#example').handsontable
+    settings =
         data: get_query()
         colHeaders: schema
         columns: cols
         contextMenu: true
         colWidths: 800 / schema.length
         afterChange: (args) ->
+          collection_name = $('#collection').val()
+          collection = window.database[collection_name]
           if args?
             row_number = args[0][0]
             table = $('#example').handsontable('getData')
             row = table[row_number]
-            collection.update({_id : row._id}, row)
+            # check if there's an id in the row (ie a new row)
+            # multiple delete
+            if row._id?
+              collection.update({_id : row._id}, row)
+            else
+              delete row._id
+              collection.insert(row)
         beforeRemoveRow: (index, amount) ->
+          collection_name = $('#collection').val()
+          collection = window.database[collection_name]
           table = $('#example').handsontable('getData')
           deleted = table[index..index+amount-1]
           for del in deleted
              collection.remove({_id: del['_id']})
-    $('table th:last').html('<button id="new_col">+</button>')
-    $('table th:not(:last)').append('<button class="delete_col">-</button>')
+    if $('#example')[0].children.length is 0
+      $('#example').handsontable(settings)
+    else
+      delete settings.afterChange
+      delete settings.beforeRemoveRow
+      $('#example').handsontable('updateSettings', settings)
+    #$('table th:last').append('<button id="new_col">+</button>')
+    $('table th').append('<button class="delete_col">-</button>')
     $('.relative').css('display', 'inline-block')
     $('#new_col').click(add_column)
     $('.delete_col').click(del_column)
